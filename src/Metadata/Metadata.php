@@ -400,7 +400,7 @@ class Metadata
     /**
      * Set the hydrator to use with this class
      *
-     * @param  string|ExtractionInterface $hydrator
+     * @param  string|ExtractionInterface|\Callable $hydrator
      * @return self
      * @throws Exception\InvalidArgumentException if the class or hydrator does not implement ExtractionInterface
      */
@@ -414,6 +414,9 @@ class Metadata
             } elseif (class_exists($hydrator)) {
                 $hydrator = new $hydrator();
             }
+        }
+        if (is_callable($hydrator)) {
+            $hydrator = call_user_func($hydrator);
         }
         if (!$hydrator instanceof ExtractionInterface) {
             if (is_object($hydrator)) {
